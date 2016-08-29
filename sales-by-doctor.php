@@ -51,7 +51,7 @@ if ( is_plugin_active( 'woocommerce/woocommerce.php' ) ) :
 	if ( ! $sbd->is_wc_old() ) :
 
 		// Taxonomy & Field set up
-		require_once plugin_dir_path( __FILE__ ) . 'custom-order-fields.php';
+		require_once plugin_dir_path( __FILE__ ) . 'doctor-taxonomy-and-order-meta.php';
 
 		/**
 		 * WooCommerce hook

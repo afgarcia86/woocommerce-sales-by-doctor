@@ -468,14 +468,5 @@ class WC_Report_Sales_By_Doctor extends WC_Admin_Report {
 
     return version_compare( $wc_version, '2.1', 'lt' );
   }
-
-  /**
-   * Plugin script enqueue function
-   *
-   * @access public
-   * @return void
-   */
-  public function sbd_enqueue() {
-    wp_enqueue_script( 'sbd_datepicker', plugins_url( 'script.js', __FILE__ ), array(), $this->version, true );
-  }
+  
 }

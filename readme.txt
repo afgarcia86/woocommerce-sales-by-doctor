@@ -1,12 +1,12 @@
 === WooCommerce Sales by Doctor ===
 Contributors: AndresTheGiant
 Plugin Site: http://mithu.me/
-Tags: woocommerce, report, sales, doctor
+Tags: woocommerce, report, sales, taxonomy
 Requires at least: 3.5
 Tested up to: 4.2.3
 Stable tag: 1.5
 
-An additional report page for WooCommerce shop to display sales attributed to a doctor from the admin report panel.
+An additional report page for WooCommerce shop to display sales attributed to a custom taxonomy (doctor) from the admin report panel.
 
 
 == Description ==
@@ -17,7 +17,7 @@ WooCommerce Sales by Doctor simply adds a report page to display doctor specific
 
 * Select time range.
 * Sales report by doctor.
-* Show reports into two different columns.
+* Show reports graphs.
 
 = Usage =
 

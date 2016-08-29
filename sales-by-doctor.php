@@ -32,23 +32,10 @@
 if ( ! function_exists( 'get_plugins' ) )
 	require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
-
-// Including Report Class
-if ( ! class_exists( 'WC_Admin_Report' ) )
-  require_once plugin_dir_path( __FILE__ ). '../woocommerce/includes/admin/reports/class-wc-admin-report.php';
-
-// Including base class
-if ( ! class_exists( 'WC_Report_Sales_By_Doctor' ) )
-	require_once plugin_dir_path( __FILE__ ) . 'class-wc-report-sales-by-doctor.php';
-
 // Whether plugin active or not
 if ( is_plugin_active( 'woocommerce/woocommerce.php' ) ) :
 
-	// The object
-	$wcar = new WC_Report_Sales_By_Doctor();
-	$sbd = new WC_Report_Sales_By_Doctor();
-
-	if ( ! $sbd->is_wc_old() ) :
+	if ( ! is_wc_old() ) :
 
 		// Taxonomy & Field set up
 		require_once plugin_dir_path( __FILE__ ) . 'doctor-taxonomy-and-order-meta.php';
@@ -75,7 +62,14 @@ if ( is_plugin_active( 'woocommerce/woocommerce.php' ) ) :
 		 * Get report.
 		 */
 		function get_report() {
-			global $sbd;
+			// Including Admin Report Class
+			if ( ! class_exists( 'WC_Admin_Report' ) )
+			  require_once plugin_dir_path( __FILE__ ). '../woocommerce/includes/admin/reports/class-wc-admin-report.php';
+			// Including Admin Report Class
+			if ( ! class_exists( 'WC_Report_Sales_By_Doctor' ) )
+				require_once plugin_dir_path( __FILE__ ) . 'class-wc-report-sales-by-doctor.php';
+
+			$sbd = new WC_Report_Sales_By_Doctor();
 			$sbd->output_report();
 		}
 
@@ -111,3 +105,15 @@ else :
 	add_action( 'admin_notices', 'wsc_notice' );
 
 endif;
+
+
+function is_wc_old() {
+  global $woocommerce;
+
+  $plugin_folder = get_plugins( '/' . 'woocommerce' );
+  $plugin_file   = 'woocommerce.php';
+  $wc_version    = $plugin_folder[$plugin_file]['Version'];
+  $wc_version    = isset( $wc_version ) ? $wc_version : $woocommerce->version;
+
+  return version_compare( $wc_version, '2.1', 'lt' );
+}

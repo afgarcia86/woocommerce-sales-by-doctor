@@ -451,22 +451,5 @@ class WC_Report_Sales_By_Doctor extends WC_Admin_Report {
       <?php
     }
   }
-
-  /**
-   * Check WooCommerce version
-   *
-   * @access public
-   * @return boolean
-   */
-  public function is_wc_old() {
-    global $woocommerce;
-
-    $plugin_folder = get_plugins( '/' . 'woocommerce' );
-    $plugin_file   = 'woocommerce.php';
-    $wc_version    = $plugin_folder[$plugin_file]['Version'];
-    $wc_version    = isset( $wc_version ) ? $wc_version : $woocommerce->version;
-
-    return version_compare( $wc_version, '2.1', 'lt' );
-  }
   
 }

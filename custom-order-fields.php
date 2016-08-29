@@ -2,7 +2,7 @@
 
 /**
  * Register Taxonomies
-*/
+ */
 function fp_wc_register_tax() {
   $args = array(
     "labels" => array(
@@ -14,10 +14,12 @@ function fp_wc_register_tax() {
     "query_var" => false,
     "rewrite" => array( 'slug' => 'doctor', 'with_front' => false ),
     "show_admin_column" => false,
+    "update_count_callback" => "_update_generic_term_count"
   );
   register_taxonomy( "doctor", array("shop_order"), $args );
 }
 add_action( 'init', 'fp_wc_register_tax' );
+
 
 /**
  * Add doctors sub page

@@ -32,6 +32,11 @@
 if ( ! function_exists( 'get_plugins' ) )
 	require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
+
+// Including Report Class
+if ( ! class_exists( 'WC_Admin_Report' ) )
+  require_once plugin_dir_path( __FILE__ ). '../woocommerce/includes/admin/reports/class-wc-admin-report.php';
+
 // Including base class
 if ( ! class_exists( 'WC_Report_Sales_By_Doctor' ) )
 	require_once plugin_dir_path( __FILE__ ) . 'class-wc-report-sales-by-doctor.php';
@@ -40,6 +45,7 @@ if ( ! class_exists( 'WC_Report_Sales_By_Doctor' ) )
 if ( is_plugin_active( 'woocommerce/woocommerce.php' ) ) :
 
 	// The object
+	$wcar = new WC_Report_Sales_By_Doctor();
 	$sbd = new WC_Report_Sales_By_Doctor();
 
 	if ( ! $sbd->is_wc_old() ) :
@@ -58,7 +64,7 @@ if ( is_plugin_active( 'woocommerce/woocommerce.php' ) ) :
 				'title'       => 'Sales by doctor',
 				'description' => '',
 				'hide_title'  => true,
-				'callback'    => 'wc_doctor_sales'
+				'callback'    => 'get_report'
 			);
 			return $reports;
 		}
@@ -66,65 +72,11 @@ if ( is_plugin_active( 'woocommerce/woocommerce.php' ) ) :
 
 
 		/**
-		 * Function to hook into WooCommerce
-		 * 
-		 * @return string
+		 * Get report.
 		 */
-		function wc_doctor_sales() {
+		function get_report() {
 			global $sbd;
-			$current_range = ! empty( $_GET['range'] ) ? sanitize_text_field( $_GET['range'] ) : '7day';
-			?>
-			<div id="poststuff" class="woocommerce-reports-wide">
-				<div class="postbox">
-					<div class="stats_range">
-				    <?php $sbd->get_export_button(); ?>
-			    	<ul>
-							<li class="<?php echo($current_range ==  'year' ? 'active':'');?>">
-								<a href="/wp-admin/admin.php?page=wc-reports&amp;tab=orders&amp;report=sales_by_doctor&amp;doctor=<?php echo $_GET['doctor']; ?>&amp;range=year">Year</a>
-							</li>
-							<li class="<?php echo($current_range ==  'last_month' ? 'active':'');?>">
-								<a href="/wp-admin/admin.php?page=wc-reports&amp;tab=orders&amp;report=sales_by_doctor&amp;doctor=<?php echo $_GET['doctor']; ?>&amp;range=last_month">Last Month</a>
-							</li>
-							<li class="<?php echo($current_range ==  'month' ? 'active':'');?>">
-								<a href="/wp-admin/admin.php?page=wc-reports&amp;tab=orders&amp;report=sales_by_doctor&amp;doctor=<?php echo $_GET['doctor']; ?>&amp;range=month">This Month</a>
-							</li>
-							<li class="<?php echo($current_range ==  '7day' ? 'active':'');?>">
-								<a href="/wp-admin/admin.php?page=wc-reports&amp;tab=orders&amp;report=sales_by_doctor&amp;doctor=<?php echo $_GET['doctor']; ?>&amp;range=7day">Last 7 Days</a>
-							</li>
-							<li class="<?php echo($current_range ==  'custom' ? 'active custom':'custom');?>">
-								Custom: 
-								<form method="get">
-									<div>
-										<input type="hidden" value="wc-reports" name="page">
-										<input type="hidden" value="orders" name="tab">
-										<input type="hidden" value="sales_by_doctor" name="report">
-										<input type="hidden" value="custom" name="range">
-										<input type="hidden" name="doctor" value="<?php if ( ! empty( $_GET['doctor'] ) ) echo esc_attr( $_GET['doctor'] ); ?>">
-										<input type="text" size="9" placeholder="yyyy-mm-dd" name="start_date" class="range_datepicker from" value="<?php if ( ! empty( $_GET['start_date'] ) ) echo esc_attr( $_GET['start_date'] ); ?>" >
-										<input type="text" size="9" placeholder="yyyy-mm-dd" name="end_date" class="range_datepicker to" value="<?php if ( ! empty( $_GET['end_date'] ) ) echo esc_attr( $_GET['end_date'] ); ?>">
-										<input type="submit" value="Go" class="button">
-									</div>
-								</form>
-							</li>
-						</ul>
-					</div>
-					<div class="inside chart-with-sidebar">
-						<div class="chart-sidebar">
-							<?php $sbd->get_chart_legend(); ?>
-							<ul class="chart-widgets">
-								<?php $sbd->reset_widget(); ?>
-  							<?php $sbd->doctors_widget(); ?>
-							</ul>
-						</div>
-						<div class="main">
-							<?php $sbd->get_main_chart(); ?>
-						</div>
-					</div>
-				</div>
-			</div>
-
-	<?php
-
+			$sbd->output_report();
 		}
 
 	else :
